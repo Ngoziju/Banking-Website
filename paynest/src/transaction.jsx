@@ -1,44 +1,57 @@
-
 import { useState } from "react";
-import { Search, Download } from "lucide-react";
+import { Search, Send } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useWallet } from "./useWallet";
+import { formatMoney } from "./walletData";
 
 function Transactions() {
   const [filter, setFilter] = useState("All");
+  const [search, setSearch] = useState("");
+  const { transactions } = useWallet();
+  const navigate = useNavigate();
 
-  const data = [
-    { name: "Salary Payment", category: "Income", date: "Nov 8, 2026", amount: "+₦150,000", type: "Income" },
-    { name: "Netflix Subscription", category: "Entertainment", date: "Nov 7, 2026", amount: "-₦4,400", type: "Expense" },
-    { name: "Bank Transfer", category: "Transfer", date: "Nov 6, 2026", amount: "-₦20,000", type: "Expense" },
-    { name: "Money Received", category: "Transfer", date: "Nov 5, 2026", amount: "+₦25,000", type: "Income" },
-    { name: "Airtime Purchase", category: "Airtime", date: "Nov 4, 2026", amount: "-₦2,000", type: "Expense" },
-  ];
+  const filtered = transactions.filter((transaction) => {
+    const matchesType =
+      filter === "All" ||
+      (filter === "Received" && transaction.direction === "in") ||
+      (filter === "Sent" && transaction.direction === "out");
+    const matchesSearch = `${transaction.title} ${transaction.detail}`
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-  const filtered = filter === "All"
-    ? data
-    : data.filter(item => item.type === filter);
+    return matchesType && matchesSearch;
+  });
 
   return (
     <>
       <div className="welcome-heading">
         <div>
           <h2>Transactions</h2>
-          <p>Track and manage your money.</p>
+          <p>Review your incoming and outgoing demo transfers.</p>
         </div>
-        <button className="primary-button">
-          <Download size={18} /> Export
+        <button className="primary-button" type="button" onClick={() => navigate("/transfer")}>
+          <Send size={18} /> Send money
         </button>
       </div>
 
       <div className="filter-bar">
         <div className="search-box">
           <Search size={18} />
-          <input placeholder="Search transactions..." />
+          <input
+            aria-label="Search transactions"
+            placeholder="Search transactions..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
         </div>
-
-        <select value={filter} onChange={e => setFilter(e.target.value)}>
+        <select
+          aria-label="Filter transactions"
+          value={filter}
+          onChange={(event) => setFilter(event.target.value)}
+        >
           <option>All</option>
-          <option>Income</option>
-          <option>Expense</option>
+          <option>Received</option>
+          <option>Sent</option>
         </select>
       </div>
 
@@ -47,24 +60,34 @@ function Transactions() {
           <thead>
             <tr>
               <th>Description</th>
-              <th>Category</th>
+              <th>Details</th>
               <th>Date</th>
               <th>Amount</th>
-              <th>Status</th>
+              <th>Type</th>
             </tr>
           </thead>
           <tbody>
-            {filtered.map((item, index) => (
-              <tr key={index}>
-                <td>{item.name}</td>
-                <td>{item.category}</td>
-                <td>{item.date}</td>
-                <td className={item.type === "Income" ? "credit" : "debit"}>
-                  {item.amount}
+            {filtered.map((transaction) => (
+              <tr key={transaction.id}>
+                <td>{transaction.title}</td>
+                <td>{transaction.detail}</td>
+                <td>{transaction.date}</td>
+                <td className={transaction.direction === "in" ? "credit" : "debit"}>
+                  {transaction.direction === "in" ? "+" : "−"}
+                  {formatMoney(transaction.amount, transaction.currency)}
                 </td>
-                <td><span className="status-success">Successful</span></td>
+                <td>
+                  <span className="status-success">
+                    {transaction.direction === "in" ? "Received · demo" : "Sent · demo"}
+                  </span>
+                </td>
               </tr>
             ))}
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan="5" className="empty-transactions">No matching transactions yet.</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
