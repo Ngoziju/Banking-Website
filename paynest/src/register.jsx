@@ -3,7 +3,7 @@ import { useState } from "react";
 import logoImage from "./assets/p logog.png";
 import ThemeToggle from "./components/ThemeToggle";
 import { Link } from "react-router-dom";
-import { apiUrl } from "./api";
+import { apiUrl, parseApiResponse } from "./api";
 
 function Register({ theme, onThemeToggle }) {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -63,7 +63,7 @@ function Register({ theme, onThemeToggle }) {
                     })
                 });
 
-            const data = await response.json();
+            const data = await parseApiResponse(response);
 
             if (!response.ok) {
                 throw new Error(data.message || "Registration failed.");

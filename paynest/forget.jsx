@@ -3,7 +3,7 @@ import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoImage from "./src/assets/p logog.png";
 import ThemeToggle from "./src/components/ThemeToggle";
-import { apiUrl } from "./src/api";
+import { apiUrl, parseApiResponse } from "./src/api";
 
 async function requestReset(path, payload) {
   let response;
@@ -17,7 +17,7 @@ async function requestReset(path, payload) {
     throw new Error("Could not connect to PayNest. Check that the server is running.");
   }
 
-  const result = await response.json().catch(() => ({}));
+  const result = await parseApiResponse(response);
   if (!response.ok) {
     throw new Error(result.message || "Something went wrong. Please try again.");
   }
