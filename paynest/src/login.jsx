@@ -3,6 +3,7 @@ import { useState } from "react";
 import logoImage from "./assets/p logog.png";
 import ThemeToggle from "./components/ThemeToggle";
 import { Link, useNavigate } from "react-router-dom";
+import { apiUrl } from "./api";
 
 function Login({ theme, onThemeToggle }) {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -20,9 +21,7 @@ function Login({ theme, onThemeToggle }) {
         setLoading(true);
 
         try {
-            const response = await fetch(
-                "http://localhost:5000/api/auth/login",
-                {
+            const response = await fetch(apiUrl("auth/login"), {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -31,8 +30,7 @@ function Login({ theme, onThemeToggle }) {
                         email,
                         password,
                     }),
-                }
-            );
+                });
 
             const data = await response.json();
 

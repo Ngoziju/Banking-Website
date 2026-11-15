@@ -3,13 +3,12 @@ import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoImage from "./src/assets/p logog.png";
 import ThemeToggle from "./src/components/ThemeToggle";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+import { apiUrl } from "./src/api";
 
 async function requestReset(path, payload) {
   let response;
   try {
-    response = await fetch(`${API_URL}/auth/${path}`, {
+    response = await fetch(apiUrl(`auth/${path}`), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

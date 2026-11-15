@@ -3,6 +3,7 @@ import { useState } from "react";
 import logoImage from "./assets/p logog.png";
 import ThemeToggle from "./components/ThemeToggle";
 import { Link } from "react-router-dom";
+import { apiUrl } from "./api";
 
 function Register({ theme, onThemeToggle }) {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -48,9 +49,7 @@ function Register({ theme, onThemeToggle }) {
         setLoading(true);
 
         try {
-            const response = await fetch(
-                "http://localhost:5000/api/auth/register",
-                {
+            const response = await fetch(apiUrl("auth/register"), {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -62,8 +61,7 @@ function Register({ theme, onThemeToggle }) {
                         phone: phone.trim(),
                         password
                     })
-                }
-            );
+                });
 
             const data = await response.json();
 
