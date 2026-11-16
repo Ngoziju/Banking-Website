@@ -3,10 +3,23 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
+  port: Number(process.env.DB_PORT || 5432),
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
+
+  // Secure SSL connection for Neon PostgreSQL
+  ssl: {
+    rejectUnauthorized: false
+  },
+
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000
+});
+
+// Handle unexpected database errors
+pool.on("error", (error) => {
+  console.error("Unexpected PostgreSQL error:", error.message);
 });
 
 module.exports = pool;

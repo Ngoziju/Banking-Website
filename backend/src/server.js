@@ -1,6 +1,7 @@
 
 const path = require("path");
 
+// Load environment variables
 require("dotenv").config({
   path: path.resolve(__dirname, "../.env")
 });
@@ -45,7 +46,6 @@ const testDatabaseConnection = async (req, res) => {
       message: "PayNest database connected successfully!",
       time: result.rows[0].now
     });
-
   } catch (error) {
     console.error("Database error:", error.message);
 
@@ -59,7 +59,7 @@ const testDatabaseConnection = async (req, res) => {
 app.get("/api/db-test", testDatabaseConnection);
 app.get("/api/test-db", testDatabaseConnection);
 
-// Protected route - JWT verification test
+// Protected route
 app.get("/api/protected-test", verifyToken, (req, res) => {
   res.json({
     success: true,
@@ -68,9 +68,14 @@ app.get("/api/protected-test", verifyToken, (req, res) => {
   });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
+// Export Express app for Vercel
+module.exports = app;
 
-app.listen(PORT, () => {
-  console.log(`PayNest server running on port ${PORT}`);
-});
+// Start server locally
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+
+  app.listen(PORT, () => {
+    console.log(`PayNest server running on port ${PORT}`);
+  });
+}
