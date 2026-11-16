@@ -1,4 +1,3 @@
-
 const path = require("path");
 
 // Load environment variables
@@ -46,8 +45,13 @@ const testDatabaseConnection = async (req, res) => {
       message: "PayNest database connected successfully!",
       time: result.rows[0].now
     });
+
   } catch (error) {
-    console.error("Database error:", error.message);
+    console.error("DATABASE DIAGNOSTIC:", {
+      message: error.message,
+      code: error.code,
+      detail: error.detail
+    });
 
     res.status(500).json({
       success: false,
@@ -56,6 +60,7 @@ const testDatabaseConnection = async (req, res) => {
   }
 };
 
+// Database test routes
 app.get("/api/db-test", testDatabaseConnection);
 app.get("/api/test-db", testDatabaseConnection);
 
