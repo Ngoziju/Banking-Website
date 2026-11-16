@@ -1309,7 +1309,7 @@ button {
 .balance-card {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #1f49f2 0%, #2d6bff 35%, #2a3bd7 100%);
+  background: linear-gradient(135deg, #8c1ff2 0%, #511bce 35%, #5f0ce4 100%);
   color: #f3f6ff;
   padding: 30px 28px 22px;
   border-radius: 26px;
