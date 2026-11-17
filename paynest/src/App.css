@@ -667,7 +667,7 @@
     var(--page-bg);
 }
 
-.sidebar {
+.dashboard > .sidebar {
   width: 240px;
   flex: 0 0 240px;
   background: #5135d9;
@@ -688,7 +688,7 @@
   margin: 0;
 }
 
-.sidebar nav {
+.dashboard .sidebar nav {
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -704,6 +704,10 @@
   flex: 1;
   min-width: 0;
   padding: 35px;
+}
+
+.dashboard-main > * {
+  min-width: 0;
 }
 
 .dashboard-header-actions {
@@ -849,6 +853,10 @@
   margin-bottom: 30px;
 }
 
+.summary-cards > * {
+  min-width: 0;
+}
+
 .summary-box {
   background: var(--surface);
   padding: 25px;
@@ -879,8 +887,20 @@
 .transaction {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 16px;
   padding: 18px 0;
   border-bottom: 1px solid var(--border);
+}
+
+.transaction > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.transaction > strong {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .income {
@@ -892,11 +912,11 @@
 }
 
 @media (max-width: 900px) {
-  .dashboard-main {
+  .dashboard .dashboard-main {
     padding: 28px 24px;
   }
 
-  .sidebar {
+  .dashboard > .sidebar {
     width: 210px;
     flex-basis: 210px;
     padding: 26px 16px;
@@ -908,42 +928,135 @@
     flex-direction: column;
   }
 
-  .sidebar {
+  .dashboard > .sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     width: 100%;
     flex: 0 0 auto;
-    gap: 20px;
-    padding: 16px 20px;
+    transform: none;
+    transition: none;
+    gap: 14px;
+    padding: 14px 16px;
   }
 
-  .sidebar nav {
+  .dashboard .sidebar nav {
+    grid-column: 1 / -1;
     flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px 20px;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-inline: -2px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding: 2px 2px 6px;
+    scrollbar-width: thin;
   }
 
-  .sidebar > a:last-child {
-    align-self: flex-start;
+  .dashboard .sidebar nav a {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    min-height: 40px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    white-space: nowrap;
   }
 
-  .dashboard-main {
+  .dashboard .sidebar > a:last-child {
+    justify-self: end;
+    white-space: nowrap;
+  }
+
+  .dashboard .dashboard-main {
     padding: 24px 20px;
   }
 
   .dashboard-header {
+    flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 24px;
   }
 
   .dashboard-header-actions {
+    justify-content: space-between;
+    width: 100%;
     gap: 12px;
   }
 
   .balance-card {
-    padding: 28px;
+    padding: 24px;
+  }
+
+  .dashboard .balance-amount {
+    min-width: 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .dashboard .balance-amount h1 {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 }
 
 @media (max-width: 480px) {
+  .dashboard .dashboard-main {
+    padding: 18px 14px;
+  }
+
+  .dashboard-header {
+    margin-bottom: 20px;
+  }
+
+  .dashboard-header h2 {
+    font-size: 22px;
+  }
+
+  .dashboard-header p {
+    font-size: 13px;
+  }
+
+  .dashboard .balance-card {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
+  .dashboard .balance-card h1 {
+    font-size: clamp(22px, 7vw, 32px);
+  }
+
+  .dashboard .summary-cards {
+    gap: 12px;
+  }
+
+  .dashboard .summary-box {
+    padding: 16px 14px;
+  }
+
+  .dashboard .summary-box p {
+    font-size: 13px;
+  }
+
+  .dashboard .summary-box h2 {
+    font-size: clamp(18px, 5vw, 24px);
+  }
+
+  .dashboard .transactions {
+    padding: 18px 16px;
+  }
+
+  .dashboard .transactions h2 {
+    font-size: 18px;
+  }
+
+  .dashboard .transaction {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    font-size: 14px;
+  }
+
   .navbar {
     padding-inline: 16px;
   }
@@ -3316,6 +3429,10 @@ td {
   .wallet-section-heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .wallet-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .wallet-card {
