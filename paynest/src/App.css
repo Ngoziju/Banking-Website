@@ -1540,6 +1540,21 @@ button {
   font-size: 11px;
 }
 
+.app.dark .stat-card {
+  border-color: var(--border);
+  background: var(--surface);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
+}
+
+.app.dark .stat-card p,
+.app.dark .stat-card small {
+  color: var(--muted);
+}
+
+.app.dark .stat-card h3 {
+  color: var(--text);
+}
+
 .stat-icon {
   width: 42px;
   height: 42px;
