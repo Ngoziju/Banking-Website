@@ -13,7 +13,7 @@ import { useWallet } from "./useWallet";
 import { CURRENCIES, formatMoney } from "./walletData";
 import { useState } from "react";
 
-function Overview() {
+function Overview({ userName }) {
   const [balanceVisible, setBalanceVisible] = useState(true);
   const { wallets, transactions } = useWallet();
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ function Overview() {
           <div className="account-details">
             <div>
               <small>Account name</small>
-              <strong>John Doe</strong>
+              <strong>{userName || "User"}</strong>
             </div>
             <div>
               <small>Account number</small>

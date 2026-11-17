@@ -5,7 +5,7 @@ import ThemeToggle from "./components/ThemeToggle";
 import { Link, useNavigate } from "react-router-dom";
 import { apiUrl, parseApiResponse } from "./api";
 
-function Login({ theme, onThemeToggle }) {
+function Login({ theme, onThemeToggle, onLogin }) {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -42,7 +42,23 @@ function Login({ theme, onThemeToggle }) {
                 throw new Error("Authentication token was not received.");
             }
 
+            const firstName =
+                typeof data.user?.first_name === "string"
+                    ? data.user.first_name.trim()
+                    : "";
+            const lastName =
+                typeof data.user?.last_name === "string"
+                    ? data.user.last_name.trim()
+                    : "";
+            const userName = [firstName, lastName].filter(Boolean).join(" ");
+
+            if (!userName) {
+                throw new Error("Your user profile was not received.");
+            }
+
             localStorage.setItem("paynestToken", data.token);
+            localStorage.setItem("paynestUserName", userName);
+            onLogin(userName);
 
             navigate("/dashboard");
 

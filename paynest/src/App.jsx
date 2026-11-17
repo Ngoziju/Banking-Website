@@ -80,11 +80,18 @@ function SettingsPage({ theme, onThemeToggle }) {
   );
 }
 
-function DashboardLayout({ theme, onThemeToggle, onLogout }) {
+function DashboardLayout({ theme, onThemeToggle, onLogout, userName }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
+  const initials =
+    userName
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0].toUpperCase())
+      .join("") || "U";
 
   const currentPage =
     navigation.find((item) => item.path === location.pathname)?.name ??
@@ -150,11 +157,11 @@ function DashboardLayout({ theme, onThemeToggle, onLogout }) {
 
           <div className="profile">
             <div className="avatar" aria-hidden="true">
-              JD
+              {initials}
             </div>
 
             <div>
-              <strong>John Doe</strong>
+              <strong>{userName || "User"}</strong>
               <small>Personal Account</small>
             </div>
           </div>
@@ -200,6 +207,9 @@ function DashboardLayout({ theme, onThemeToggle, onLogout }) {
 
 function App() {
   const [theme, setTheme] = useState("light");
+  const [userName, setUserName] = useState(
+    () => localStorage.getItem("paynestUserName") || ""
+  );
 
   const toggleTheme = () => {
     setTheme((currentTheme) =>
@@ -209,6 +219,8 @@ function App() {
 
   const logout = () => {
     localStorage.removeItem("paynestToken");
+    localStorage.removeItem("paynestUserName");
+    setUserName("");
   };
 
   return (
@@ -217,7 +229,13 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Login theme={theme} onThemeToggle={toggleTheme} />}
+            element={
+              <Login
+                theme={theme}
+                onThemeToggle={toggleTheme}
+                onLogin={setUserName}
+              />
+            }
           />
 
           <Route
@@ -241,11 +259,15 @@ function App() {
                     theme={theme}
                     onThemeToggle={toggleTheme}
                     onLogout={logout}
+                    userName={userName}
                   />
                 </WalletProvider>
               }
             >
-              <Route path="/dashboard" element={<Overview />} />
+              <Route
+                path="/dashboard"
+                element={<Overview userName={userName} />}
+              />
               <Route path="/transactions" element={<Transactions />} />
               <Route path="/transfer" element={<Transfers />} />
               <Route path="/cards" element={<MyCards />} />
