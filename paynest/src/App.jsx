@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   BrowserRouter,
   Navigate,
@@ -34,7 +34,6 @@ import MyCards from "./settings";
 import logoImage from "./assets/p logog.png";
 import ThemeToggle from "./components/ThemeToggle";
 import WalletProvider from "./WalletProvider";
-import { apiUrl, parseApiResponse } from "./api";
 import "./App.css";
 
 const navigation = [
@@ -213,55 +212,6 @@ function App() {
   const [userName, setUserName] = useState(
     () => localStorage.getItem("paynestUserName") || ""
   );
-
-  useEffect(() => {
-    const token = localStorage.getItem("paynestToken");
-    if (userName || !token) return undefined;
-
-    let active = true;
-
-    async function loadUserName() {
-      try {
-        const response = await fetch(apiUrl("auth/me"), {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await parseApiResponse(response);
-
-        if (!response.ok) {
-          throw new Error(data.message || "Could not retrieve user profile.");
-        }
-
-        const firstName =
-          typeof data.user?.first_name === "string"
-            ? data.user.first_name.trim()
-            : "";
-        const lastName =
-          typeof data.user?.last_name === "string"
-            ? data.user.last_name.trim()
-            : "";
-        const profileName = [firstName, lastName].filter(Boolean).join(" ");
-
-        if (!profileName) {
-          throw new Error("Your user profile did not include a name.");
-        }
-
-        if (active) {
-          localStorage.setItem("paynestUserName", profileName);
-          setUserName(profileName);
-        }
-      } catch (error) {
-        console.error("Could not load the signed-in user's name:", error);
-      }
-    }
-
-    loadUserName();
-
-    return () => {
-      active = false;
-    };
-  }, [userName]);
 
   const toggleTheme = () => {
     setTheme((currentTheme) =>
