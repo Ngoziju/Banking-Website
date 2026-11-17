@@ -85,8 +85,10 @@ function DashboardLayout({ theme, onThemeToggle, onLogout, userName }) {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const displayName =
+    userName || localStorage.getItem("paynestUserName") || "User";
   const initials =
-    userName
+    displayName
       .split(/\s+/)
       .filter(Boolean)
       .slice(0, 2)
@@ -161,7 +163,7 @@ function DashboardLayout({ theme, onThemeToggle, onLogout, userName }) {
             </div>
 
             <div>
-              <strong>{userName || "User"}</strong>
+              <strong>{displayName}</strong>
               <small>Personal Account</small>
             </div>
           </div>
@@ -191,7 +193,7 @@ function DashboardLayout({ theme, onThemeToggle, onLogout, userName }) {
 
           <div>
             <h3>{currentPage}</h3>
-            <p>Welcome back to PayNest!</p>
+            <p>Welcome back, {displayName}!</p>
           </div>
 
           <ThemeToggle theme={theme} onToggle={onThemeToggle} />
