@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 
-function Dashboard({ theme, onThemeToggle }) {
+function Dashboard({ theme, onThemeToggle, userName }) {
   const [balanceVisible, setBalanceVisible] = useState(true);
+  const displayName =
+    userName || localStorage.getItem("paynestUserName") || "User";
 
   return (
     <div className="dashboard">
@@ -46,7 +48,7 @@ function Dashboard({ theme, onThemeToggle }) {
                   <path d="M4.5 21a7.5 7.5 0 0 1 15 0" />
                 </svg>
               </span>
-              <p>John Doe</p>
+              <p>{displayName}</p>
             </div>
           </div>
         </header>
